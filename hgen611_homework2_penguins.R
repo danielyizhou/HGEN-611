@@ -46,13 +46,10 @@ swirl()
 # For each lesson you complete, type out the honor pledge below declaring that you have
 # completed the lesson.
 
-
-
-
-
-
-
-
+# On my honor, I completed Lesson 5: Missing Values.
+# On my honor, I completed Lesson 6: Subsetting Vectors.
+# On my honor, I completed Lesson 7: Matrices and Data Frames.
+# On my honor, I completed Lesson 12: Looking at Data.
 
 # Part 2 Unleash the Penguins! ------------------------------------------------------------
 
