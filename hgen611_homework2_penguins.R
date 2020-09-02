@@ -77,19 +77,29 @@ penguins
 
 # 1. How many unique species of penguins are represented? How many penguins are in each species?
 
+  table(penguins$species, useNA = "always")
+  # there are 3 unique species of penguins: 152 Adelie, 68 Chinstrap, and 124 Gentoo.
 
 # 2. How many unique islands are represented in the dataset? Are these islands real places?
 #    (Hint: check the help page)
-
-
+  
+  table(penguins$island, useNA = "always")
+  ?penguins
+  # there are 3 unique islands in the dataset: Biscoe, Dream, and Torgersen. These represent 
+  # 3 real islands in the Palmer Archipelago in Antarctica.
+  
 # 3. Do any of the islands have more than one species of penguin that live there?
 #    (Hint: table() can count multiple variables)
 
+  table(penguins$species, penguins$island)
+  # Yes, both Biscoe and Dreame islands have more than one species of penguin.
 
 # 4. Create a new data.frame called my_gentoo that contains only Gentoo penguins
 #    that live on Biscoe Island. What is the average bill length for those penguins?
-
-
+  
+  my_gentoo <- penguins[penguins$species == "Gentoo" & penguins$island == "Biscoe",]
+  mean(my_gentoo$bill_length_mm, na.rm = TRUE)
+  # the average bill length for these penguins is 47.50 mm. 
 
 # 5. Let's say you wanted to get an idea of how much each species varied by weight.
 #    Typing all of that out using base R (i.e., non-tidyverse style code) would take 
@@ -117,8 +127,8 @@ ggplot(penguins) +
 ggplot(penguins) +
   geom_bar(aes(species)) 
 
-
-
+# Explanation: This code generates a bar graph comparing the number of penguins 
+#              belonging to each of the 3 species in the dataset. 
 
 # Plot 2 ----
 ggplot(penguins) +
@@ -127,8 +137,10 @@ ggplot(penguins) +
                  color = sex), size = 2) +
   theme_light()
 
-
-
+# Explanation: This code generates a scatterplot comparing flipper length to
+#              body mass. Furthermore, penguins of different species are indicated 
+#              by different shapes, and penguins of different sex are indicated by
+#              different color.
 
 # Plot 3 ----
 ggplot(penguins[penguins$species == "Chinstrap", ], 
@@ -139,9 +151,9 @@ ggplot(penguins[penguins$species == "Chinstrap", ],
                 alpha = 0.5) +
   theme_classic()
 
-
-
-
+# Explanation: This code generates a scatterplot comparing bill depth by bill length from only 
+#              Chinestrap penguins. Additionally, a quantile regression is fit on the plot with
+#              lines indicating different quantiles in the data, similar to a box-plot.
 
 # Plot 4 ----
 ggplot(penguins, aes(bill_length_mm, bill_depth_mm, 
@@ -150,8 +162,9 @@ ggplot(penguins, aes(bill_length_mm, bill_depth_mm,
   geom_smooth(method = "lm", 
               se = FALSE)
 
-
-
+# Explanation: this code generates a scatterplot comparing bill length with bill depth. Penguin species
+#              are differentiated by color. There is also a line of best fit going through data points
+#              across the 3 different species.
 
 # Plot 5 ----
 ggplot(penguins, aes(flipper_length_mm, bill_length_mm, 
@@ -164,7 +177,9 @@ ggplot(penguins, aes(flipper_length_mm, bill_length_mm,
   ggtitle("My plot",subtitle = "Penguins on Parade")
     # Credit to Allison Horst & Allison Hill for picking great colors (https://education.rstudio.com/blog/2020/07/palmerpenguins-cran)
 
-
+# Explanation: This code generates a scatterplot comparing flipper length and bill length. Species is 
+#              indicated by different colors AND shapes. Custom colors, axes labels, themes, and titles
+#              were added. 
 
 # Plot 6 ----
 # Remember: you are looking at the code to become comfortable looking at 
@@ -183,9 +198,9 @@ penguins %>%
   facet_wrap(~physical_characteristic, scales = "free_y") +
   theme_bw()
 
-
-
-
+# Explanation: This code generates several box-plots comparing bill depth, bill length, body mass, and 
+#              flipper length across the 3 different penguin species. Each penguin species is denoted
+#              by a unique color. 
 
 # Plot 7 ----
 # This plot is a density plot. Density plots can be useful when 
@@ -206,9 +221,11 @@ penguins %>%
   geom_density(alpha = 0.3) +
   facet_wrap(~physical_characteristic, scales = "free")
 
-
-
-
+# Explanation: This code produces several density plots looking at the distribution of penguin species
+#              across bill depth, bill length, body mass, and flipper length. Different sepcies are 
+#              differentiated by color. This visualization is useful for understanding differences and 
+#              similarities between the 3 penguin species in terms of several of their physical 
+#              characteristics.
 
 # Part 3 Putting it all together ------------------------------------------------------------------
 
@@ -224,6 +241,15 @@ penguins %>%
 # b) change the x and y labels so that they are real words and not variable names
 # c) add a professional title to the plot that reflects the data shown
 
+penguins_noNA <- na.omit(penguins) #simple function that removes all NAs from the data table. 
 
-
+ggplot(penguins_noNA) +
+  geom_point(aes(flipper_length_mm, body_mass_g, 
+                 color = species,          # Changing color to species instead of sex easily distinguishes Gentoo penguins having the largest body mass. 
+                 shape = sex), size = 2) + 
+  scale_shape_manual(values = c(15, 8)) +  # manually changeing the types of shapes used allows for easier differentiation between sex on the graph.
+  xlab("Flipper Length (mm)") + # the following 3 lines specify axes labels and a title. 
+  ylab("Body Mass (g)") +
+  ggtitle("Species and Sex Differences in Penguin Flipper Length and Body Mass") +
+theme_light()
 
